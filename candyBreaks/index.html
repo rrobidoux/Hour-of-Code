@@ -1,0 +1,104 @@
+<!doctype html>
+<html>
+<head>
+	<title>CHALLENGE: Candy Bar Equity</title>
+	<link rel="stylesheet" type="text/css" href="candy.css" />
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	
+	<script>
+		/** Create the 10 pieces on startup **/
+		$(document).ready(function() {
+			pieceCount = 0;
+			rowCount = 2;
+			colCount = 5;
+    		/* Candy Bar Rows */
+    		for(r = 0; r < rowCount; r++) {
+    			
+    			/* Candy Bar Cols */
+    			for(c = 0; c < colCount; c++) {
+    				var img = $('<img />').attr({
+            			'id': 'piece' + pieceCount,
+            			'class': 'candy row'+r,
+            			'src': 'candyPiece.png',
+            			'alt': 'A Candy Piece',
+            			'title': 'Click to select',
+            			'width': 100,
+            			'style': 'position: absolute; top: ' + (25+r*125) + 'px; left: ' + (c*100) + 'px;'
+        			}).appendTo('main');
+    				pieceCount++;
+    			}
+    		}
+    		
+    		$('.candy').click(function() {
+    			$(this).css('opacity', '0.4');
+    			$(this).addClass("selected");
+    		});
+    		
+    		$('#break').click(function() { 
+				//Check for valid selection
+				var row1Count = 0;
+				var row2Count = 0;
+				var isValidSelection = false;
+				
+				if(('.selected').length != ('.candy').length) {
+					$('.selected').each(function(index) {
+						
+						if($(this).hasClass('row0')) {
+							if(row1Count == $(this).index()) {
+								row1Count++;	
+							}
+						}
+						else if($(this).hasClass('row1')) {
+							if(row2Count == $(this).index()) {
+								row2Count++;	
+							}
+						}
+						
+					});
+					isValidSelection = true;
+				}
+				
+				if(isValidSelection) {
+					//Adjust each selected element!
+					$('.selected').each(function(index) {
+						
+						//Calculate new offsets positions
+						var newXLocation = $(this).offset().left + 20;
+						var newYLocation = $(this).offset().top + 20;
+											
+						//Set new offsets
+						$(this).css('left', newXLocation);
+						$(this).css('top', newYLocation);
+						
+					});
+				}
+				else
+					alert("Invalid Selection");
+	
+				$('.candy').css('opacity', '1.0');
+				$('.candy').removeClass('selected');
+    		});
+    		
+    		$('#reset').click(function() {
+    			$('.candy').css('opacity', '1.0');
+    			$('.candy').removeClass('selected');
+    		});
+    	});
+	</script>
+</head>
+<body>
+	<header>
+		<h1>How Many "Breaks" to Make Equal Parts?</h1>
+		<p> INSTRUCTIONS: Select the <strong>adjacent pieces</strong> you want to break off by clicking on each candy piece. When you are ready to separate the pieces, click on the "BREAK" button</p>
+	</header>
+	
+	<main>
+	
+	</main>
+	
+	<footer>
+		<p id="break">BREAK</p>
+		<p id="reset">reset</p>
+	</footer>
+
+</body>
